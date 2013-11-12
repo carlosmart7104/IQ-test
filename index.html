@@ -9,6 +9,27 @@
 
 </head>
 <body>
+<ul class="list"></ul>
+<script type="text/javascript">
+$(document).ready(function(){
+	$.getJSON( "data.json", function(data) {
+		var numberOfQuestions = 0;
+		var content = "";
+		$.each(data['questions'], function(key, val) {
+			content = content + "<li id='" + key + "'><h2>" + val['title'] + "</h2><ul>";
+
+			$.each(val['answers'], function(key1, val1) {
+				content = content + "<li id='" + key1 + "'>" + val1['title'] + "</li>";
+			});
+
+			content = content + "</ul></li>";
+			numberOfQuestions++;
+		});
+
+		$(".list").append(content);
+	});
+});
+</script>
 
 </body>
 </html>
