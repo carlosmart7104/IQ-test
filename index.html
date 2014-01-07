@@ -9,26 +9,117 @@
 
 </head>
 <body>
-<ul class="list"></ul>
+<div class="container">
+	<div class="timer"><p>20:00</p></div>
+	<div class="progress"><ul></ul></div>
+	<ul class="list"></ul>
+</div><!--container ends-->
+
 <script type="text/javascript">
+var nextQuestion = 1;
+var numberOfQuestions = 10; //***
+var answersCorrect = 0;
+var answersWrong = 0;
+var timeAllocated = 1200; //*** //time limit in seconds 
+var countDown = timeAllocated;
+var countDownInterval;
+var timeTaken = 0; //time the user spent taking the test
+
 $(document).ready(function(){
-	$.getJSON( "data.json", function(data) {
-		var numberOfQuestions = 0;
-		var content = "";
-		$.each(data['questions'], function(key, val) {
-			content = content + "<li id='" + key + "'><h2>" + val['title'] + "</h2><ul>";
-
-			$.each(val['answers'], function(key1, val1) {
-				content = content + "<li id='" + key1 + "'>" + val1['title'] + "</li>";
+	//start audio
+	var audioElement = document.createElement("audio");
+	audioElement.setAttribute("src","audio/Honest-side.mp3");
+	audioElement.setAttribute("autoplay","autoplay");
+	$.get();
+	audioElement.addEventListener("load", function(){ audioElement.play(); }, true);
+	//control audio
+	$(".button1").on("click",function(){
+		audioElement.pause();
+	});
+	
+	//start the question
+	getQuestion(nextQuestion);
+	//draw progress bar
+	drawProgressBar();
+	//start the countdown timer
+	countDownInterval = setInterval(doCountDown,1000);
+	
+	//cliking on an answer
+	$(document).on("click",".list ul li",function(){
+		var state = parseInt($(this).data("state"));
+		if(state == 1){
+			//correct answer
+			answersCorrect++;
+		} else { 
+			//wrong answer
+			answersWrong++;
+		}
+		if(nextQuestion <= numberOfQuestions){
+			//load new question
+			$(".list").fadeOut(400,function(){
+				getQuestion(nextQuestion);
 			});
-
-			content = content + "</ul></li>";
-			numberOfQuestions++;
-		});
-
-		$(".list").append(content);
+		} else {
+			//or end the test
+			var percentage = Math.floor(answersCorrect * 100 / numberOfQuestions);
+			$(".list").fadeOut(400,function(){
+				drawProgressBar();
+				$(".container").append("<div class='results'><h2>Results</h2><h3>Completed in " + secondsToMMSS(timeAllocated - countDown) + " minutes</h3><div class='resultsBar'><div class='completion'><p>" + percentage + "%</p></div></div></div>");
+				$(".completion").animate({"width": percentage + "%" },1200);
+			});
+			clearInterval(countDownInterval);
+			$(".timer").fadeOut(2000);
+		}
 	});
 });
+
+function getQuestion(questionNumber){	
+	$.getJSON( "data.json", function(data) {
+		var qTitle = data['questions']['q' + questionNumber]['title'];
+		var content = "<li id='q" + questionNumber + "'><h2>" + qTitle + "</h2><ul>";
+
+		$.each(data['questions']['q' + questionNumber]['answers'], function(key1, val1) {
+			content += "<li id='" + key1 + "' data-state='" + val1['state'] + "'><p>" + val1['title'] + "</p></li>";
+		});
+		content += "</ul></li>";
+		$(".list").html(content).fadeIn();
+		
+		//set the next question number
+		nextQuestion++;
+		
+		//draw progress bar
+		drawProgressBar();
+	});	
+}
+
+function drawProgressBar(){
+	var progressBar = "";
+	for(var i=1;i<=numberOfQuestions;i++){
+		var class1 = "";
+		if(i<(nextQuestion-1)){ class1 = "class='done'"; }
+		if(i==(nextQuestion-1)){ class1 = "class='current'"; }
+		if(i>nextQuestion){ class1 = ""; }
+		progressBar += "<li " + class1 + "></li>";	
+	}
+	$(".progress ul").html(progressBar);	
+}
+
+function doCountDown(){
+	$(".timer p").html(secondsToMMSS(countDown));
+	countDown--;
+}
+function secondsToMMSS(seconds){
+	if(seconds > 0){
+		var minutes = Math.floor(seconds / 60);
+		var secondsLeft = seconds - (minutes*60);
+		if(secondsLeft < 10){
+			secondsLeft =  "0" + secondsLeft;
+		}
+		return minutes + ":" + secondsLeft;
+	} else {
+		return  "Time's up";
+	}	
+}
 </script>
 
 </body>

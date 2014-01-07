@@ -1,5 +1,5 @@
 html,body	{ font-family:"Helvetica Neue", Gotham, Helvetica, Arial, sans-serif; height:100%; position:relative; }
-body 		{ position:relative; background-color:#f4f4f4; }
+body 		{ position:relative; background-color:#222; }
 .clear { clear:both; }
 .px5 { clear:both; width:100%; height:5px; }
 .px10 { clear:both; width:100%; height:10px; }
@@ -15,9 +15,35 @@ body 		{ position:relative; background-color:#f4f4f4; }
 
 /*** CONTENT ***/
 
+.container { width:800px; height:auto; margin:50px auto; background-color:#fff; border-radius:0 15px 15px 15px; position:relative; }
 
+.list { }
+.list > li { }
+.list > li h2 { font-size:32px; font-weight:100; padding:20px; }
+.list > li ul { margin:20px 0; border-top:#ccc solid 1px; }
+.list > li ul li { cursor:pointer; background-color:#fff; transition:all 0.2s; box-shadow:none; border-bottom:#ccc solid 1px; }
+.list > li ul li:last-child { border-radius:0 0 15px 15px; }
+.list > li ul li:hover { background-color:#f4f4f4; transition:all 0.2s; box-shadow:inset rgba(0,0,0,0.3)0 0 8px; }
+.list > li ul li:active { background-color:#27cddf; transition:all 0.2s; box-shadow:inset rgba(0,0,0,0.5)0 0 10px; }
+.list > li ul li p { color:#333; font-size:20px; font-weight:500; padding:20px; transition:all 0.2s; text-shadow:none; }
+.list > li ul li:active p { color:#fff; text-shadow:rgba(0,0,0,0.4)1px 1px 1px; }
 
+.progress { position:absolute; top:-15px; left:0; text-align:center; }
+.progress ul { }
+.progress li { display:inline-block; width:25px; height:15px; background-color:#ccc; margin-right:2px; box-shadow:inset rgba(0,0,0,0.2)0 -4px 4px; }
+.progress li.current { background-color:#fff; box-shadow:none; }
+.progress li.done { background-color:#666; box-shadow:inset rgba(0,0,0,0.2)0 -4px 4px; }
 
+.timer { position:absolute; top:-33px; right:10px; text-align:right; }
+.timer p { font-size:46px; font-weight:900; color:#27cddf; text-shadow:rgba(0,0,0,0.6)1px 1px 2px, rgba(255,255,255,1)-1px -1px 0px; }
+
+.results { }
+.results h2 { font-size:32px; font-weight:100; padding:20px; }
+.results h3 { font-size:20px; font-weight:500; padding:0 20px 50px 20px; }
+.results p { font-size:20px; font-weight:500; padding:20px; }
+.results .resultsBar { background-color:#f4f4f4; position:relative; height:60px; width:100%; overflow:hidden; border-radius:0 0 15px 15px; }
+.results .resultsBar .completion { background-color:#27cddf; box-shadow:inset rgba(255,255,255,0.4)0 15px 10px, rgba(0,0,0,0.2)4px 0 5px; position:relative; left:0; top:0; height:inherit; width:1%; }
+.results .resultsBar .completion p { position:absolute; top:0px; right:-80px; font-size:22px; font-weight:900; color:#333; }
 
 
 /*** Media queries ***/
