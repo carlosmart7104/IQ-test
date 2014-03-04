@@ -76,10 +76,21 @@ $(document).ready(function(){
 function getQuestion(questionNumber){	
 	$.getJSON( "data.json", function(data) {
 		var qTitle = data['questions']['q' + questionNumber]['title'];
-		var content = "<li id='q" + questionNumber + "'><h2>" + qTitle + "</h2><ul>";
+		var qIMG = data['questions']['q' + questionNumber]['image'];
+		var questionImage = '';
+		if(qIMG != null){ 
+			questionImage = "<br><img src='" + qIMG + "'>"
+		}
+		var content = "<li id='q" + questionNumber + "'><h2>" + qTitle + questionImage + "</h2><ul>";
 
 		$.each(data['questions']['q' + questionNumber]['answers'], function(key1, val1) {
-			content += "<li id='" + key1 + "' data-state='" + val1['state'] + "'><p>" + val1['title'] + "</p></li>";
+			var aIMG = val1['image'];
+			var answerImage = '';
+			if(aIMG != null){ 
+				answerImage = "<img src='" + aIMG + "'>"
+			}
+		
+			content += "<li id='" + key1 + "' data-state='" + val1['state'] + "'><p>" + val1['title'] +  answerImage + "</p></li>";
 		});
 		content += "</ul></li>";
 		$(".list").html(content).fadeIn();
